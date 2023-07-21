@@ -69,7 +69,7 @@ class ServerSentEventsTransport implements ITransport {
       return Future.error(e);
     }
 
-    _sseClient!.stream!.listen((data) {
+    _sseClient!.stream.listen((data) {
       if (onReceive != null) {
         try {
           _logger?.finest(
