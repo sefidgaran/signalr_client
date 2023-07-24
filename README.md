@@ -5,7 +5,7 @@
 A Flutter SignalR Client for [ASP.NET Core](https://docs.microsoft.com/aspnet/core/signalr).  
 ASP.NET Core SignalR is an open-source library that simplifies adding real-time web functionality to apps. Real-time web functionality enables server-side code to push content to clients instantly.
 
-Tested with ASP.NET Core 3.1 & ASP .NET Core 6
+Tested with ASP.NET Core 3.1 & ASP .NET Core 6 and 7
 
 The client is able to invoke server side hub functions (including streaming functions) and to receive method invocations issued by the server.  It also supports the auto-reconnect feature.
 
