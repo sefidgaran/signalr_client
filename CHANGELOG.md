@@ -1,3 +1,15 @@
+## [1.3.5]
+
+* Upgrade packages and remove warnings
+  
+## [1.3.4]
+
+* Fix the disconnect exception caused by send message error
+  
+## [1.3.3]
+
+* Allowing invocation arguments to be null
+
 ## [1.3.2]
 
 * Fix broken authorization in SSE (Server Side Events) transport
