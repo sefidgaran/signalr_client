@@ -1,4 +1,4 @@
-## [1.3.6]
+## [1.4.0]
 
 * Emit events once the HubConnectionState changes
   
