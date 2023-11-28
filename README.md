@@ -53,7 +53,7 @@ final serverUrl = "192.168.10.50:51001";
 // Creates the connection by using the HubConnectionBuilder.
 final hubConnection = HubConnectionBuilder().withUrl(serverUrl).build();
 // When the connection is closed, print out a message to the console.
-final hubConnection.onclose( (error) => print("Connection Closed"));
+hubConnection.onclose( (error) => print("Connection Closed"));
 
 ```
 Logging is supported via the dart [logging package](https://pub.dartlang.org/packages/logging):
@@ -90,7 +90,7 @@ final httpOptions = new HttpConnectionOptions(logger: transportProtLogger);
 // Creates the connection by using the HubConnectionBuilder.
 final hubConnection = HubConnectionBuilder().withUrl(serverUrl, options: httpOptions).configureLogging(hubProtLogger).build();
 // When the connection is closed, print out a message to the console.
-final hubConnection.onclose( (error) => print("Connection Closed"));
+hubConnection.onclose( (error) => print("Connection Closed"));
 
 ```
 #### 2. Connect to a Hub:
