@@ -1,7 +1,7 @@
   
 ## [1.3.7]
 
-* Update dependencies
+* Update dependencies using http: ^1.1.0
   
 ## [1.3.6]
 
