@@ -1,14 +1,15 @@
 import 'dart:async';
 
-import '../../main.dart';
-import '../../tests/tests.dart';
-import '../../utils/viewModel/viewModel.dart';
-import '../../utils/viewModel/viewModelProvider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/ihub_protocol.dart';
 //import 'package:signalr_netcore/msgpack_hub_protocol.dart';
 import 'package:signalr_netcore/signalr_client.dart';
+
+import '../../main.dart';
+import '../../tests/tests.dart';
+import '../../utils/viewModel/viewModel.dart';
+import '../../utils/viewModel/viewModelProvider.dart';
 
 typedef HubConnectionProvider = Future<HubConnection> Function();
 
@@ -42,7 +43,7 @@ class TestsPageViewModel extends ViewModel {
     _logMessagesSub = Logger.root.onRecord.listen(_handleLogMessage);
     _logger = Logger("TestsPageViewModel");
 
-    _serverUrl = kServerUrl + "/IntegrationTestHub";
+    _serverUrl = kServerUrl + "/hubs/vital-signs";
     _tests = Tests(_getHubConnection, _logger);
   }
 
