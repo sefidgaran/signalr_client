@@ -1,4 +1,7 @@
-  
+## [1.3.8]
+
+* Pass authentication token in header
+
 ## [1.3.7]
 
 * Update dependencies using http: ^1.1.0

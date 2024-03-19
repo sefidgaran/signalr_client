@@ -1,9 +1,10 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
+import 'package:signalr_client_core/hub_connection.dart';
+
 import '../../views/pages/testsPageViewModel.dart';
 import '../test.dart';
-import 'package:logging/logging.dart';
-import 'package:signalr_netcore/signalr_client.dart';
 
 class ClientMethodComplexParameterComplexReturnValue extends Test {
   // Properties

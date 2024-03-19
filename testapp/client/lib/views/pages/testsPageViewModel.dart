@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
-import 'package:signalr_netcore/ihub_protocol.dart';
-//import 'package:signalr_netcore/msgpack_hub_protocol.dart';
-import 'package:signalr_netcore/signalr_client.dart';
+import 'package:signalr_client_core/ihub_protocol.dart';
+import 'package:signalr_client_core/signalr_client.dart';
 
 import '../../main.dart';
 import '../../tests/tests.dart';

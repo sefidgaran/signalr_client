@@ -1,4 +1,4 @@
-name: chatclient
+name: chat_client
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  signalr_netcore:
+  signalr_client_core:
     path: ../
 
   logging: ^1.2.0

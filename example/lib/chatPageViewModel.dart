@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
-import 'package:signalr_netcore/signalr_client.dart';
+import 'package:logging/logging.dart';
+import 'package:signalr_client_core/signalr_client.dart';
 
 import 'main.dart';
 import 'utils/viewModel/viewModel.dart';
 import 'utils/viewModel/viewModelProvider.dart';
-import 'package:flutter/widgets.dart';
-import 'package:logging/logging.dart';
 
 typedef HubConnectionProvider = Future<HubConnection> Function();
 
