@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
-import 'package:signal_r_client/ihub_protocol.dart';
-import 'package:signal_r_client/json_hub_protocol.dart';
-import 'package:signal_r_client/text_message_format.dart';
+import 'package:signalr_client_core/ihub_protocol.dart';
+import 'package:signalr_client_core/json_hub_protocol.dart';
+import 'package:signalr_client_core/text_message_format.dart';
 import 'package:test/test.dart';
 
 Function deepEq = const DeepCollectionEquality().equals;

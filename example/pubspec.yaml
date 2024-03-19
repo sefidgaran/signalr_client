@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  signal_r_client:
+  signalr_client_core:
     path: ../
 
   logging: ^1.2.0

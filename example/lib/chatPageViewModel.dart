@@ -4,10 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-import 'package:signal_r_client/http_connection_options.dart';
-import 'package:signal_r_client/hub_connection.dart';
-import 'package:signal_r_client/hub_connection_builder.dart';
-import 'package:signal_r_client/web_supporting_http_client.dart';
+import 'package:signalr_client_core/signalr_client.dart';
 
 import 'main.dart';
 import 'utils/viewModel/viewModel.dart';

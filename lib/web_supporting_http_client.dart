@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-import 'package:signal_r_client/ihub_protocol.dart';
+import 'package:signalr_client_core/ihub_protocol.dart';
 
 import 'errors.dart';
 import 'signalr_http_client.dart';
