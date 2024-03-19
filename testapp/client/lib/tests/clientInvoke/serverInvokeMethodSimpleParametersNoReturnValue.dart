@@ -1,7 +1,8 @@
+import 'package:signal_r_client/hub_connection.dart';
+
 import '../../views/pages/testsPageViewModel.dart';
 import '../test.dart';
 import 'package:logging/logging.dart';
-import 'package:signalr_netcore/signalr_client.dart';
 
 class ServerInvokeMethodSimpleParametersNoReturnValue extends Test {
   // Properties

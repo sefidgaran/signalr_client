@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
-import 'package:signalr_netcore/ihub_protocol.dart';
-//import 'package:signalr_netcore/msgpack_hub_protocol.dart';
-import 'package:signalr_netcore/signalr_client.dart';
+import 'package:signal_r_client/http_connection_options.dart';
+import 'package:signal_r_client/hub_connection.dart';
+import 'package:signal_r_client/hub_connection_builder.dart';
+import 'package:signal_r_client/ihub_protocol.dart';
 
 import '../../main.dart';
 import '../../tests/tests.dart';

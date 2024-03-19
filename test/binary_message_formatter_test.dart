@@ -1,14 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:signalr_netcore/binary_message_format.dart';
-import 'package:test/test.dart';
 import 'package:collection/collection.dart';
+import 'package:signal_r_client/binary_message_format.dart';
+import 'package:test/test.dart';
 
 Function deepEq = const DeepCollectionEquality().equals;
 
 void main() {
-  // Common
-
   group('Binary Message Formatter write -> ', () {
     test('Empty bytes -> ', () {
       final payload = Uint8List.fromList([]);

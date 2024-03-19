@@ -1,8 +1,9 @@
+import 'package:signal_r_client/hub_connection.dart';
+
 import '../utils/viewModel/viewModel.dart';
 import '../views/pages/testsPageViewModel.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:signalr_netcore/signalr_client.dart';
 
 abstract class Test extends ViewModel {
   // Properties

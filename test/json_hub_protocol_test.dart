@@ -1,9 +1,9 @@
-import 'package:signalr_netcore/text_message_format.dart';
-import 'package:signalr_netcore/ihub_protocol.dart';
-import 'package:signalr_netcore/json_hub_protocol.dart';
-import 'package:test/test.dart';
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
+import 'package:signal_r_client/ihub_protocol.dart';
+import 'package:signal_r_client/json_hub_protocol.dart';
+import 'package:signal_r_client/text_message_format.dart';
+import 'package:test/test.dart';
 
 Function deepEq = const DeepCollectionEquality().equals;
 
