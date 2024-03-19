@@ -1,5 +1,6 @@
 import 'package:logging/logging.dart';
 
+import 'default_reconnect_policy.dart';
 import 'errors.dart';
 import 'http_connection.dart';
 import 'http_connection_options.dart';
@@ -9,7 +10,6 @@ import 'iretry_policy.dart';
 import 'itransport.dart';
 import 'json_hub_protocol.dart';
 import 'utils.dart';
-import 'default_reconnect_policy.dart';
 
 /// A builder for configuring {@link @microsoft/signalr.HubConnection} instances.
 class HubConnectionBuilder {
@@ -101,6 +101,7 @@ class HubConnectionBuilder {
           "The 'HubConnectionBuilder.withUrl' method must be called before building the connection.");
     }
     final connection = HttpConnection(_url!, options: httpConnectionOptions);
+
     return HubConnection.create(
         connection, _logger, _protocol ?? JsonHubProtocol(),
         reconnectPolicy: _reconnectPolicy);

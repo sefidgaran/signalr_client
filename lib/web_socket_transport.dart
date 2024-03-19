@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'errors.dart';
@@ -36,23 +37,21 @@ class WebSocketTransport implements ITransport {
 
     _logger?.finest("(WebSockets transport) Connecting");
 
-    if (_accessTokenFactory != null) {
-      final token = await _accessTokenFactory!();
-      if (!isStringEmpty(token)) {
-        final encodedToken = Uri.encodeComponent(token);
-        url = url! +
-            (url.indexOf("?") < 0 ? "?" : "&") +
-            "access_token=$encodedToken";
-      }
-    }
-
     var websocketCompleter = Completer();
     var opened = false;
+
     url = url!.replaceFirst('http', 'ws');
+
     _logger?.finest("WebSocket try connecting to '$url'.");
-    _webSocket = WebSocketChannel.connect(Uri.parse(url));
+    _webSocket = IOWebSocketChannel.connect(Uri.parse(url), headers: {
+      'Authorization':
+          'Bearer ${_accessTokenFactory != null ? await _accessTokenFactory!() : ''}'
+    });
     opened = true;
-    if (!websocketCompleter.isCompleted) websocketCompleter.complete();
+
+    if (!websocketCompleter.isCompleted) {
+      websocketCompleter.complete();
+    }
     _logger?.info("WebSocket connected to '$url'.");
     _webSocketListenSub = _webSocket!.stream.listen(
       // onData

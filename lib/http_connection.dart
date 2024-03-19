@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
 
-import 'web_supporting_http_client.dart';
 import 'errors.dart';
 import 'http_connection_options.dart';
 import 'iconnection.dart';
@@ -15,6 +14,7 @@ import 'server_sent_events_transport.dart';
 import 'signalr_http_client.dart';
 import 'utils.dart';
 import 'web_socket_transport.dart';
+import 'web_supporting_http_client.dart';
 
 enum ConnectionState {
   Connecting,
@@ -351,6 +351,7 @@ class HttpConnection implements IConnection {
     // Store the original base url and the access token factory since they may change
     // as part of negotiating
     var url = baseUrl;
+
     _accessTokenFactory = _options.accessTokenFactory;
 
     try {
@@ -438,15 +439,18 @@ class HttpConnection implements IConnection {
 
   Future<NegotiateResponse> _getNegotiationResponse(String url) async {
     MessageHeaders headers = MessageHeaders();
+
     headers.addMessageHeaders(_options.headers);
 
     if (_accessTokenFactory != null) {
       final token = await _accessTokenFactory!();
+
       headers.setHeaderValue("Authorization", "Bearer $token");
     }
-
     final negotiateUrl = _resolveNegotiateUrl(url);
+
     _logger?.finer("Sending negotiation request: $negotiateUrl");
+
     try {
       final SignalRHttpRequest options = SignalRHttpRequest(
           content: "", headers: headers, timeout: _options.requestTimeout);
@@ -464,6 +468,7 @@ class HttpConnection implements IConnection {
 
       var negotiateResponse =
           NegotiateResponse.fromJson(json.decode(response.content as String));
+
       if (negotiateResponse.negotiateVersion == null ||
           negotiateResponse.negotiateVersion! < 1) {
         // Negotiate version 0 doesn't use connectionToken
