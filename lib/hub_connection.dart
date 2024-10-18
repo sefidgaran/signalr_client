@@ -329,7 +329,18 @@ class HubConnection {
   /// args: The arguments used to invoke the server method.
   /// Returns an object that yields results from the server as they are received.
   ///
-  Stream<Object?> stream(String methodName, List<Object> args) {
+  Stream<Object?> stream(String methodName, List<Object> args) { 
+    return streamControllable(methodName, args).stream; 
+  }
+
+  /// Invokes a streaming hub method on the server using the specified name and arguments.
+  ///
+  /// T: The type of the items returned by the server.
+  /// methodName: The name of the server method to invoke.
+  /// args: The arguments used to invoke the server method.
+  /// Returns a StreamControler object that yields results from the server as they are received.
+  ///
+  StreamController<Object?> streamControllable(String methodName, List<Object> args) {
     final t = _replaceStreamingParams(args);
     final invocationDescriptor =
         _createStreamInvocation(methodName, args, t.item2);
@@ -371,13 +382,14 @@ class HubConnection {
 
     _launchStreams(t.item1, promiseQueue);
 
-    return streamController.stream;
+    return streamController;
   }
 
   Future<void> _sendMessage(Object? message) {
     _resetKeepAliveInterval();
     return _connection.send(message);
   }
+
 
   /// Sends a js object to the server.
   /// message: The object to serialize and send.

@@ -1,0 +1,7 @@
+[user]
+	name = Tobias Sachs
+	email = Tobias.Sachs@vivasecur.de
+[core]
+	editor = nvim
+[push]
+	autoSetupRemote = true
