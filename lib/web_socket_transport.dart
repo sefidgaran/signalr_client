@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
@@ -53,8 +54,12 @@ class WebSocketTransport implements ITransport {
     _logger?.finest("WebSocket try connecting to '$url'.");
 
     try {
-      final webSocket = await WebSocket.connect(url, headers: headers);
-      _webSocket = IOWebSocketChannel(webSocket);
+      if (kIsWeb) {
+        _webSocket = WebSocketChannel.connect(Uri.parse(url));
+      } else {
+        final webSocket = await io.WebSocket.connect(url, headers: headers);
+        _webSocket = IOWebSocketChannel(webSocket);
+      }
       opened = true;
       if (!websocketCompleter.isCompleted) websocketCompleter.complete();
       _logger?.info("WebSocket connected to '$url'.");
