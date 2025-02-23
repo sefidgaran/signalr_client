@@ -1,3 +1,8 @@
+## [1.4.1]
+
+* Add back web support that was removed previously in #93
+   - Websocket on browser doesn't support passing headers, instead the token must be passed via query string in the url
+
 ## [1.4.0]
 
 * Fix websocket auth issues
