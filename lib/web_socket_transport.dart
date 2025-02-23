@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'dart:io' as io;
-import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/io.dart';
