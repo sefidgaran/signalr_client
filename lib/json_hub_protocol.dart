@@ -218,13 +218,17 @@ class JsonHubProtocol implements IHubProtocol {
     }
 
     if (message is CompletionMessage) {
-      return {
+      if (message.error != null && message.result != null) {
+        throw ("Completion message must contain either 'error' or 'result'");
+      }
+      var r = {
         "type": messageType,
         "invocationId": message.invocationId,
         "headers": message.headers.asMap,
-        "error": message.error,
-        "result": message.result
       };
+      if (message.error != null) r["error"] = message.error;
+      if (message.result != null) r["result"] = message.result;
+      return r;
     }
 
     if (message is PingMessage) {
