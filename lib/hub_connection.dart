@@ -339,7 +339,8 @@ class HubConnection {
   /// args: The arguments used to invoke the server method.
   /// Returns a StreamControler object that yields results from the server as they are received.
   ///
-  StreamController<Object?> streamControllable(String methodName, List<Object> args) {
+  StreamController<Object?> streamControllable(
+      String methodName, List<Object> args) {
     final t = _replaceStreamingParams(args);
     final invocationDescriptor =
         _createStreamInvocation(methodName, args, t.keys.toList());
@@ -408,8 +409,8 @@ class HubConnection {
   Future<void> send(String methodName, {List<Object>? args}) {
     args = args ?? [];
     final t = _replaceStreamingParams(args);
-    final sendPromise =
-        _sendWithProtocol(_createInvocation(methodName, args, true, t.keys.toList()));
+    final sendPromise = _sendWithProtocol(
+        _createInvocation(methodName, args, true, t.keys.toList()));
 
     _launchStreams(t, sendPromise);
     return sendPromise;
@@ -912,7 +913,8 @@ class HubConnection {
     }
   }
 
-  _launchStreams(Map<String, Stream<Object>> streams, Future<void>? promiseQueue) {
+  _launchStreams(
+      Map<String, Stream<Object>> streams, Future<void>? promiseQueue) {
     if (streams.length == 0) {
       return;
     }
@@ -925,11 +927,11 @@ class HubConnection {
     // We want to iterate over the keys, since the keys are the stream ids
     streams.forEach((id, stream) {
       stream.listen((item) {
-        promiseQueue = promiseQueue?.then((_) =>
-            _sendWithProtocol(_createStreamItemMessage(id, item)));
-      }, onDone: () {
         promiseQueue = promiseQueue?.then(
-            (_) => _sendWithProtocol(_createCompletionMessage(id)));
+            (_) => _sendWithProtocol(_createStreamItemMessage(id, item)));
+      }, onDone: () {
+        promiseQueue = promiseQueue
+            ?.then((_) => _sendWithProtocol(_createCompletionMessage(id)));
       }, onError: (err) {
         String message;
         if (err is Exception) {
@@ -938,15 +940,15 @@ class HubConnection {
           message = "Unknown error";
         }
 
-        promiseQueue = promiseQueue?.then((_) => _sendWithProtocol(
-            _createCompletionMessage(id, error: message)));
+        promiseQueue = promiseQueue?.then((_) =>
+            _sendWithProtocol(_createCompletionMessage(id, error: message)));
       });
     });
   }
 
-  Map<String, Stream<Object>> _replaceStreamingParams(
-      List<Object> args) {
-    final Map<String, Stream<Object>> streams = new Map<String, Stream<Object>>();
+  Map<String, Stream<Object>> _replaceStreamingParams(List<Object> args) {
+    final Map<String, Stream<Object>> streams =
+        new Map<String, Stream<Object>>();
 
     for (var i = 0; i < args.length; i++) {
       final argument = args[i];
