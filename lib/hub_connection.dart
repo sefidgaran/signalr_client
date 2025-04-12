@@ -330,9 +330,20 @@ class HubConnection {
   /// Returns an object that yields results from the server as they are received.
   ///
   Stream<Object?> stream(String methodName, List<Object> args) {
+    return streamControllable(methodName, args).stream;
+  }
+
+  /// Invokes a streaming hub method on the server using the specified name and arguments.
+  ///
+  /// T: The type of the items returned by the server.
+  /// methodName: The name of the server method to invoke.
+  /// args: The arguments used to invoke the server method.
+  /// Returns a StreamControler object that yields results from the server as they are received.
+  ///
+  StreamController<Object?> streamControllable(String methodName, List<Object> args) {
     final t = _replaceStreamingParams(args);
     final invocationDescriptor =
-        _createStreamInvocation(methodName, args, t.item2);
+        _createStreamInvocation(methodName, args, t.keys.toList());
 
     late Future<void> promiseQueue;
     final StreamController streamController = StreamController<Object?>(
@@ -369,9 +380,9 @@ class HubConnection {
       _callbacks.remove(invocationDescriptor.invocationId);
     });
 
-    _launchStreams(t.item1, promiseQueue);
+    _launchStreams(t, promiseQueue);
 
-    return streamController.stream;
+    return streamController;
   }
 
   Future<void> _sendMessage(Object? message) {
@@ -399,9 +410,9 @@ class HubConnection {
     args = args ?? [];
     final t = _replaceStreamingParams(args);
     final sendPromise =
-        _sendWithProtocol(_createInvocation(methodName, args, true, t.item2));
+        _sendWithProtocol(_createInvocation(methodName, args, true, t.keys.toList()));
 
-    _launchStreams(t.item1, sendPromise);
+    _launchStreams(t, sendPromise);
     return sendPromise;
   }
 
@@ -419,7 +430,7 @@ class HubConnection {
     args = args ?? [];
     final t = _replaceStreamingParams(args);
     final invocationDescriptor =
-        _createInvocation(methodName, args, false, t.item2);
+        _createInvocation(methodName, args, false, t.keys.toList());
 
     final completer = Completer<Object?>();
 
@@ -455,7 +466,7 @@ class HubConnection {
       _callbacks.remove(invocationDescriptor.invocationId);
     });
 
-    _launchStreams(t.item1, promiseQueue);
+    _launchStreams(t, promiseQueue);
 
     return completer.future;
   }
@@ -902,7 +913,7 @@ class HubConnection {
     }
   }
 
-  _launchStreams(List<Stream<Object>> streams, Future<void>? promiseQueue) {
+  _launchStreams(Map<String, Stream<Object>> streams, Future<void>? promiseQueue) {
     if (streams.length == 0) {
       return;
     }
@@ -913,13 +924,13 @@ class HubConnection {
     }
 
     // We want to iterate over the keys, since the keys are the stream ids
-    for (var i = 0; i < streams.length; i++) {
-      streams[i].listen((item) {
+    streams.forEach((id, stream) {
+      stream.listen((item) {
         promiseQueue = promiseQueue?.then((_) =>
-            _sendWithProtocol(_createStreamItemMessage(i.toString(), item)));
+            _sendWithProtocol(_createStreamItemMessage(id, item)));
       }, onDone: () {
         promiseQueue = promiseQueue?.then(
-            (_) => _sendWithProtocol(_createCompletionMessage(i.toString())));
+            (_) => _sendWithProtocol(_createCompletionMessage(id)));
       }, onError: (err) {
         String message;
         if (err is Exception) {
@@ -929,15 +940,14 @@ class HubConnection {
         }
 
         promiseQueue = promiseQueue?.then((_) => _sendWithProtocol(
-            _createCompletionMessage(i.toString(), error: message)));
+            _createCompletionMessage(id, error: message)));
       });
-    }
+    });
   }
 
-  Tuple2<List<Stream<Object>>, List<String>> _replaceStreamingParams(
+  Map<String, Stream<Object>> _replaceStreamingParams(
       List<Object> args) {
-    final List<Stream<Object>> streams = [];
-    final List<String> streamIds = [];
+    final Map<String, Stream<Object>> streams = new Map<String, Stream<Object>>();
 
     for (var i = 0; i < args.length; i++) {
       final argument = args[i];
@@ -945,15 +955,14 @@ class HubConnection {
         final streamId = _invocationId!;
         _invocationId = _invocationId! + 1;
         // Store the stream for later use
-        streams[streamId] = argument as Stream<Object>;
-        streamIds.add(streamId.toString());
+        streams[streamId.toString()] = argument as Stream<Object>;
 
         // remove stream from args
         args.removeAt(i);
       }
     }
 
-    return Tuple2<List<Stream<Object>>, List<String>>(streams, streamIds);
+    return streams;
   }
 
   /// isObservable
