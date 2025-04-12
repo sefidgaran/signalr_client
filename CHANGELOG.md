@@ -1,3 +1,6 @@
+## [1.4.3]  
+* Fixed WebSocket authorization issue on Web platform.
+
 ## [1.4.2]
 * Added support for client-to-server streaming with controllable stream lifecycle via StreamController, enabling client-side abortion of streams. Preserved existing stream() method for backward compatibility.
 
