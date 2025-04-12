@@ -1,3 +1,6 @@
+## [1.4.2]
+* Added support for client-to-server streaming with controllable stream lifecycle via StreamController, enabling client-side abortion of streams. Preserved existing stream() method for backward compatibility.
+
 ## [1.4.1]
 
 * Add back web support that was removed previously in #93
