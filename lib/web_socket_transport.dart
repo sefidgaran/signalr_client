@@ -43,7 +43,14 @@ class WebSocketTransport implements ITransport {
     if (_accessTokenFactory != null) {
       final token = await _accessTokenFactory!();
       if (!isStringEmpty(token)) {
-        headers['Authorization'] = 'Bearer $token';
+        if (kIsWeb) {
+          final encodedToken = Uri.encodeComponent(token);
+          url = url! +
+              (url.indexOf("?") < 0 ? "?" : "&") +
+              "access_token=$encodedToken";
+        } else {
+          headers['Authorization'] = 'Bearer $token';
+        }
       }
     }
 
