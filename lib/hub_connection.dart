@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:tuple/tuple.dart';
 
 import 'default_reconnect_policy.dart';
 import 'errors.dart';
