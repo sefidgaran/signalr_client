@@ -555,14 +555,14 @@ class HttpConnection implements IConnection {
   ITransport _constructTransport(HttpTransportType transport) {
     switch (transport) {
       case HttpTransportType.WebSockets:
-        return WebSocketTransport(
-            _accessTokenFactory, _logger, _options.logMessageContent);
+        return WebSocketTransport(_accessTokenFactory, _logger,
+            _options.logMessageContent, _options.headers);
       case HttpTransportType.ServerSentEvents:
         return new ServerSentEventsTransport(_httpClient, _accessTokenFactory,
             _logger, _options.logMessageContent);
       case HttpTransportType.LongPolling:
         return LongPollingTransport(_httpClient, _accessTokenFactory, _logger,
-            _options.logMessageContent);
+            _options.logMessageContent, _options.headers);
       default:
         throw new GeneralError("Unknown transport: $transport.");
     }
