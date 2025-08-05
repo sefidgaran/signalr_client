@@ -16,6 +16,7 @@ class LongPollingTransport implements ITransport {
   final Logger? _logger;
   final bool _logMessageContent;
   final AbortController _pollAbort;
+  MessageHeaders? _headers;
 
   bool? get pollAborted => _pollAbort.aborted;
 
@@ -36,11 +37,13 @@ class LongPollingTransport implements ITransport {
       SignalRHttpClient httpClient,
       AccessTokenFactory? accessTokenFactory,
       Logger? logger,
-      bool logMessageContent)
+      bool logMessageContent,
+      MessageHeaders? headers)
       : _httpClient = httpClient,
         _accessTokenFactory = accessTokenFactory,
         _logger = logger,
         _logMessageContent = logMessageContent,
+        _headers = headers,
         _pollAbort = AbortController() {
     _running = false;
   }
@@ -60,7 +63,7 @@ class LongPollingTransport implements ITransport {
 
     final pollOptions = SignalRHttpRequest(
         abortSignal: _pollAbort.signal,
-        headers: MessageHeaders(),
+        headers: _headers ?? MessageHeaders(),
         timeout: 100000);
 
     final token = await _getAccessToken();
