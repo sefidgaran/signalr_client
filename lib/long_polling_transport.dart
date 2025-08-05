@@ -162,7 +162,7 @@ class LongPollingTransport implements ITransport {
           new GeneralError("Cannot send until the transport is connected"));
     }
     await sendMessage(_logger, "LongPolling", _httpClient, _url,
-        _accessTokenFactory, data, _logMessageContent);
+        _accessTokenFactory, data, _logMessageContent, _headers);
   }
 
   @override

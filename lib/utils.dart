@@ -52,12 +52,13 @@ Future<void> sendMessage(
     String? url,
     AccessTokenFactory? accessTokenFactory,
     Object content,
-    bool logMessageContent) async {
-  MessageHeaders headers = MessageHeaders();
+    bool logMessageContent,
+    MessageHeaders? headers) async {
+  MessageHeaders _headers = headers ?? MessageHeaders();
   if (accessTokenFactory != null) {
     final token = await accessTokenFactory();
     if (!isStringEmpty(token)) {
-      headers.setHeaderValue("Authorization", "Bearer $token");
+      _headers.setHeaderValue("Authorization", "Bearer $token");
     }
   }
 
@@ -66,7 +67,7 @@ Future<void> sendMessage(
 
   //final responseType = content is String ? "arraybuffer" : "text";
   SignalRHttpRequest req =
-      SignalRHttpRequest(content: content, headers: headers);
+      SignalRHttpRequest(content: content, headers: _headers);
   final response = await httpClient.post(url, options: req);
 
   logger?.finest(

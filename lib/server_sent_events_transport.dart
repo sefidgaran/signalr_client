@@ -102,6 +102,7 @@ class ServerSentEventsTransport implements ITransport {
       _accessTokenFactory,
       data,
       _logMessageContent,
+      null,
     );
   }
 
