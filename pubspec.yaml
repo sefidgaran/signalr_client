@@ -3,6 +3,14 @@ description: A flutter client for ASP.NET Core SignalR. The client is able to in
 version: 1.4.4
 homepage: https://github.com/sefidgaran/signalr_client
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
 environment:
   sdk: ">=2.12.0 <4.0.0"
 
@@ -13,7 +21,7 @@ dependencies:
   logging: ^1.2.0
   tuple: ^2.0.2
   web_socket_channel: ^3.0.0
-  sse_channel: ^0.1.1
+  sse_channel: ^0.2.2
   message_pack_dart: ^2.0.1
   http: ^1.1.0
 
@@ -22,4 +30,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   quiver: ^3.2.1
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0

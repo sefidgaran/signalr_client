@@ -46,9 +46,11 @@ namespace SignalRChatServer
       app.UseDefaultFiles();
       app.UseStaticFiles();
       app.UseCookiePolicy();
-      app.UseCors("CorsPolicy");
 
       app.UseRouting();
+
+      // Apply CORS after routing and before endpoints so hub requests get the CORS headers
+      app.UseCors("CorsPolicy");
 
       app.UseAuthorization();
       app.UseEndpoints(endpoints =>
