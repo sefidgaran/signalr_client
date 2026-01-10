@@ -1,3 +1,8 @@
+## [1.4.5]
+* Add platform-specific WebSocket transport (IO vs Web) via conditional imports
+* Restore web support by removing direct `dart:io` usage on browser builds
+* Update sample chat server to .NET 10 and align SignalR MessagePack dependency
+
 ## [1.4.4]
 * Adds message headers to the web socket transport
 
