@@ -146,6 +146,16 @@ The Client provides the function like this:
 
 ```
 
+Client functions can also return a result back to the server. If the server uses `InvokeAsync` (which expects a result), the client function can simply return a value or a `Future`:
+
+```dart
+  hubConnection.on("aClientProvidedFunctionWithResult", (parameters) async {
+    // Perform some work
+    await Future.delayed(Duration(seconds: 1));
+    return "This is the result from the client!"; // This value will be sent back to the server
+  });
+```
+
 #### 5. Using Msgpack for serialization
 
 The Hub should be configured to use the msgpack protocol in both the client and server

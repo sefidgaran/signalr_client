@@ -1,3 +1,6 @@
+## [1.5.0]
+* Added support for returning client results to the server from client methods.
+
 ## [1.4.4]
 * Adds message headers to the web socket transport
 

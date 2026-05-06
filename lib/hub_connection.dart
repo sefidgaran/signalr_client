@@ -694,7 +694,8 @@ class HubConnection {
     final methods = _methods[invocationMessage.target!.toLowerCase()];
     if (methods != null) {
       try {
-        final results = methods.map((m) => m(invocationMessage.arguments)).toList();
+        final results =
+            methods.map((m) => m(invocationMessage.arguments)).toList();
         if (!isStringEmpty(invocationMessage.invocationId)) {
           Object? result;
           if (results.isNotEmpty) {
@@ -703,13 +704,16 @@ class HubConnection {
               result = await result;
             }
           }
-          final message = CompletionMessage(invocationId: invocationMessage.invocationId, result: result);
+          final message = CompletionMessage(
+              invocationId: invocationMessage.invocationId, result: result);
           await _sendMessage(message);
         }
       } catch (e) {
         _logger?.severe("A client method threw an exception: $e");
         if (!isStringEmpty(invocationMessage.invocationId)) {
-          final message = CompletionMessage(invocationId: invocationMessage.invocationId, error: e.toString());
+          final message = CompletionMessage(
+              invocationId: invocationMessage.invocationId,
+              error: e.toString());
           await _sendMessage(message);
         }
       }
@@ -717,7 +721,9 @@ class HubConnection {
       _logger?.warning(
           "No client method with the name '${invocationMessage.target}' found.");
       if (!isStringEmpty(invocationMessage.invocationId)) {
-        final message = CompletionMessage(invocationId: invocationMessage.invocationId, error: "Client method '${invocationMessage.target}' not found.");
+        final message = CompletionMessage(
+            invocationId: invocationMessage.invocationId,
+            error: "Client method '${invocationMessage.target}' not found.");
         try {
           await _sendMessage(message);
         } catch (e) {
