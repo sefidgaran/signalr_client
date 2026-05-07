@@ -55,7 +55,7 @@ enum HubConnectionState {
 
 typedef InvocationEventCallback = void Function(
     HubMessageBase? invocationEvent, Exception? error);
-typedef MethodInvocationFunc = void Function(List<Object?>? arguments);
+typedef MethodInvocationFunc = dynamic Function(List<Object?>? arguments);
 typedef ClosedCallback = void Function({Exception? error});
 typedef ReconnectingCallback = void Function({Exception? error});
 typedef ReconnectedCallback = void Function({String? connectionId});
@@ -690,22 +690,46 @@ class HubConnection {
             "Server timeout elapsed without receiving a message from the server."));
   }
 
-  void _invokeClientMethod(InvocationMessage invocationMessage) {
+  Future<void> _invokeClientMethod(InvocationMessage invocationMessage) async {
     final methods = _methods[invocationMessage.target!.toLowerCase()];
     if (methods != null) {
-      methods.forEach((m) => m(invocationMessage.arguments));
-      if (!isStringEmpty(invocationMessage.invocationId)) {
-        // This is not supported in v1. So we return an error to avoid blocking the server waiting for the response.
-        final message =
-            "Server requested a response, which is not supported in this version of the client.";
-        _logger?.severe(message);
-
-        // We don't need to wait on this Promise.
-        _stopPromise = _stopInternal(error: GeneralError(message));
+      try {
+        final results =
+            methods.map((m) => m(invocationMessage.arguments)).toList();
+        if (!isStringEmpty(invocationMessage.invocationId)) {
+          Object? result;
+          if (results.isNotEmpty) {
+            result = results.first;
+            if (result is Future) {
+              result = await result;
+            }
+          }
+          final message = CompletionMessage(
+              invocationId: invocationMessage.invocationId, result: result);
+          await _sendMessage(message);
+        }
+      } catch (e) {
+        _logger?.severe("A client method threw an exception: $e");
+        if (!isStringEmpty(invocationMessage.invocationId)) {
+          final message = CompletionMessage(
+              invocationId: invocationMessage.invocationId,
+              error: e.toString());
+          await _sendMessage(message);
+        }
       }
     } else {
       _logger?.warning(
           "No client method with the name '${invocationMessage.target}' found.");
+      if (!isStringEmpty(invocationMessage.invocationId)) {
+        final message = CompletionMessage(
+            invocationId: invocationMessage.invocationId,
+            error: "Client method '${invocationMessage.target}' not found.");
+        try {
+          await _sendMessage(message);
+        } catch (e) {
+          _logger?.severe("Failed to send CompletionMessage: $e");
+        }
+      }
     }
   }
 

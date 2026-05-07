@@ -10,11 +10,13 @@ Tested with ASP.NET Core 3.1 & ASP .NET Core 6
 The client is able to invoke server side hub functions (including streaming functions) and to receive method invocations issued by the server.  It also supports the auto-reconnect feature.
 
 The client supports the following transport protocols:
+
 * WebSocket
 * Service Side Events
 * Long Polling
 
 The client supports the following hub protocols:
+
 * Json
 * MessagePack
 
@@ -23,10 +25,10 @@ The client supports the following hub protocols:
 * [Chat client/server](https://github.com/sefidgaran/signalr_client/tree/master/example) - A simple client/server chat application.
 * [Integration test app](https://github.com/sefidgaran/signalr_client/tree/master/testapp/client) - To see how a client calls various types of hub functions.
   
-
 ## Getting Started
 
 Add `signalr_netcore` to your `pubspec.yaml` dependencies:
+
 ```yaml
 ...
 dependencies:
@@ -43,7 +45,8 @@ Important Note: if you are experiencing issues (for example not receiving messag
 
 Let's demo some basic usages:
 
-#### 1. Create a hub connection:
+#### 1. Create a hub connection
+
 ```dart
 // Import the library.
 import 'package:signalr_netcore/signalr_client.dart';
@@ -56,6 +59,7 @@ final hubConnection = HubConnectionBuilder().withUrl(serverUrl).build();
 final hubConnection.onclose( (error) => print("Connection Closed"));
 
 ```
+
 Logging is supported via the dart [logging package](https://pub.dartlang.org/packages/logging):
 
 ```dart
@@ -93,16 +97,19 @@ final hubConnection = HubConnectionBuilder().withUrl(serverUrl, options: httpOpt
 final hubConnection.onclose( (error) => print("Connection Closed"));
 
 ```
-#### 2. Connect to a Hub:
+
+#### 2. Connect to a Hub
+
 Calling following method starts handshaking and connects the client to SignalR server
+
 ```c
 await hubConnection.start();
 ```
 
-
-#### 3. Calling a Hub function:
+#### 3. Calling a Hub function
 
 Assuming there is this hub function:
+
 ```c
 public string MethodOneSimpleParameterSimpleReturnValue(string p1)
 {
@@ -120,10 +127,10 @@ The client can invoke the function by using:
 
 ```
 
-
-#### 4. Calling a client function:
+#### 4. Calling a client function
 
 Assuming the server calls a function "aClientProvidedFunction":
+
 ```c
   await Clients.Caller.SendAsync("aClientProvidedFunction", null);
 ```
@@ -144,6 +151,16 @@ The Client provides the function like this:
     logger.log(LogLevel.Information, "Server invoked the method");
   }
 
+```
+
+Client functions can also return a result back to the server. If the server uses `InvokeAsync` (which expects a result), the client function can simply return a value or a `Future`:
+
+```dart
+  hubConnection.on("aClientProvidedFunctionWithResult", (parameters) async {
+    // Perform some work
+    await Future.delayed(Duration(seconds: 1));
+    return "This is the result from the client!"; // This value will be sent back to the server
+  });
 ```
 
 #### 5. Using Msgpack for serialization
@@ -180,28 +197,28 @@ public void ConfigureServices(IServiceCollection services)
 ### A note about the parameter types
 
 All function parameters and return values are serialized/deserialized into/from JSON by using the dart:convert package (json.endcode/json.decode). Make sure that you:
+
 * use only simple parameter types
 
 or
 
 * use objects that implements toJson() since that method is used by the dart:convert package to serialize an object.
 
+Flutter Json 101:
 
-Flutter Json 101: 
 * [flutter.io](https://flutter.io/json/)
 * [json.encode](https://api.dartlang.org/stable/2.0.0/dart-convert/JsonCodec/encode.html)
 * [json.decode](https://api.dartlang.org/stable/2.0.0/dart-convert/JsonCodec/decode.html)
-
 
 #### MSGPACK
 
 All function parameters and return values are serialized/deserialized into/from Msgpack by using the [msgpack_dart](https://pub.dev/packages/msgpack_dart) package. Make sure that you:
 
-- use only simple parameter types
+* use only simple parameter types
   or
-- Convert your classes to maps using Json encode/decode and then pass it to msgpack
+* Convert your classes to maps using Json encode/decode and then pass it to msgpack
   or
-- Serialize the message into bytes using msgpack_dart using custom encoders and decoders before passing it to signalr
+* Serialize the message into bytes using msgpack_dart using custom encoders and decoders before passing it to signalr
 
 #### [Msgpack - It's like JSON but fast and small.](https://msgpack.org/index.html)
 
